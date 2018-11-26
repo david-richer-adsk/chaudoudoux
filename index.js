@@ -65,6 +65,23 @@ const TotalPointIntentHandler = {
     }
 };
 
+const SwitchChildIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'switch_child';
+    },
+    handle(handlerInput) {
+        const child = handlerInput.requestEnvelope.request.intent.slots.child.value
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.child = child
+        const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt('patate')
+            .getResponse();
+    }
+};
+
 const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -134,7 +151,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         LaunchRequestHandler,
         AddPointIntentHandler,
         TotalPointIntentHandler,
-        HelpIntentHandler,
+        SwitchChildIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler) // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
