@@ -7,7 +7,7 @@ function bootstrap(handlerInput) {
     const sessionAttributes = {};
 
     Object.assign(sessionAttributes, {
-      child: "David",
+      child: "Paul",
       points: {
           "David": 0,
           "Celeste": 0
@@ -51,7 +51,7 @@ const AddPointIntentHandler = {
     },
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const child = handlerInput.requestEnvelope.request.intent.slots.child.value
+        const child = sessionAttributes.child
         
         let count = parseInt(sessionAttributes.points[child], 10)
         count += 1
@@ -71,8 +71,8 @@ const TotalPointIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'count_points';
     },
     handle(handlerInput) {
-        const child = handlerInput.requestEnvelope.request.intent.slots.child.value
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const child = sessionAttributes.child
         const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
         return handlerInput.responseBuilder
             .speak(speechText)
