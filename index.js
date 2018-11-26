@@ -12,7 +12,7 @@ const LaunchRequestHandler = {
 
         Object.assign(sessionAttributes, {
           points: {
-              "David": 0,
+              "David": 11,
               "Celeste": 0
           }
         });
@@ -41,7 +41,7 @@ const AddPointIntentHandler = {
         count += 1
         sessionAttributes.points[child] = count
         
-        const speechText = 'One chaudoudoux added for ' + child + '. Good Job ' + child + '!!!' ;
+        const speechText = 'Good Job ' + child + '!!!' + ' You now have ' + sessionAttributes.points[child] + ' chaudoudoux!';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt('patate')
@@ -55,9 +55,29 @@ const TotalPointIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'count_points';
     },
     handle(handlerInput) {
-        const child = sessionAttributes.child
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const child = sessionAttributes.child
         const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt('patate')
+            .getResponse();
+    }
+};
+
+const RewardIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'reward';
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const child = sessionAttributes.child
+
+        let count = parseInt(sessionAttributes.points[child], 10)
+        let diff = 20 - count
+
+        const speechText = 'You need ' + diff + ' more chaudoudoux to get a candy!';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt('patate')
@@ -167,6 +187,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         AddPointIntentHandler,
         TotalPointIntentHandler,
         SwitchChildIntentHandler,
+        RewardIntentHandler,
         ListTasksIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
