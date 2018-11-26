@@ -23,7 +23,7 @@ const LaunchRequestHandler = {
 
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(False)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -35,7 +35,7 @@ const AddPointIntentHandler = {
     },
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const child = handlerInput.requestEnvelope.request.intent.slots.child.value
+        const child = sessionAttributes.child
         
         let count = parseInt(sessionAttributes.points[child], 10)
         count += 1
@@ -44,7 +44,7 @@ const AddPointIntentHandler = {
         const speechText = 'One chaudoudoux added for ' + child + '. Good Job ' + child + '!!!' ;
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(False)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -55,12 +55,12 @@ const TotalPointIntentHandler = {
             && handlerInput.requestEnvelope.request.intent.name === 'count_points';
     },
     handle(handlerInput) {
-        const child = handlerInput.requestEnvelope.request.intent.slots.child.value
+        const child = sessionAttributes.child
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(False)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -75,7 +75,7 @@ const ListTasksIntentHandler = {
         const speechText = 'Here are the tasks you can do';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(False)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -89,7 +89,7 @@ const SwitchChildIntentHandler = {
         const child = handlerInput.requestEnvelope.request.intent.slots.child.value
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.child = child
-        const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
+        const speechText = 'Hi ' + child + '! You have ' + sessionAttributes.points[child] + ' chaudoudoux!';
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt('patate')
