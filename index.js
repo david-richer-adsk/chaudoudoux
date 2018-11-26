@@ -23,6 +23,7 @@ function bootstrap(handlerInput) {
             "Do your homework",
             "Feed the dog"
         ]
+      }
     });
 
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
