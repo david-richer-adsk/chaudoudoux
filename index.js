@@ -23,7 +23,7 @@ const LaunchRequestHandler = {
 
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt(speechText)
+            .shouldEndSession(False)
             .getResponse();
     }
 };
@@ -44,7 +44,7 @@ const AddPointIntentHandler = {
         const speechText = 'One chaudoudoux added for ' + child + '. Good Job ' + child + '!!!' ;
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt('patate')
+            .shouldEndSession(False)
             .getResponse();
     }
 };
@@ -60,7 +60,22 @@ const TotalPointIntentHandler = {
         const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt('patate')
+            .shouldEndSession(False)
+            .getResponse();
+    }
+};
+
+const ListTasksIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+            && handlerInput.requestEnvelope.request.intent.name === 'list_tasks';
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const speechText = 'Here are the tasks you can do';
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .shouldEndSession(False)
             .getResponse();
     }
 };
@@ -152,6 +167,7 @@ exports.handler = Alexa.SkillBuilders.custom()
         AddPointIntentHandler,
         TotalPointIntentHandler,
         SwitchChildIntentHandler,
+        ListTasksIntentHandler,
         CancelAndStopIntentHandler,
         SessionEndedRequestHandler,
         IntentReflectorHandler) // make sure IntentReflectorHandler is last so it doesn't override your custom intent handlers
