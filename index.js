@@ -3,21 +3,37 @@
 // session persistence, api calls, and more.
 const Alexa = require('ask-sdk-core');
 
+function bootstrap(handlerInput) {
+    const sessionAttributes = {};
+
+    Object.assign(sessionAttributes, {
+      child: "David",
+      points: {
+          "David": 0,
+          "Celeste": 0
+      },
+      tasks:{ 
+        "David": [
+            "Make your bed",
+            "Clean your room",
+            "Take out the trash"
+        ],
+        "Celeste": [
+            "Clean the dishes",
+            "Do your homework",
+            "Feed the dog"
+        ]
+    });
+
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+}
+
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput) {
-        const sessionAttributes = {};
-
-        Object.assign(sessionAttributes, {
-          points: {
-              "David": 0,
-              "Celeste": 0
-          }
-        });
-
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        bootstrap(handlerInput)
 
         const speechText = 'Chaudoudoux is up and running!';
 
@@ -73,8 +89,10 @@ const ListTasksIntentHandler = {
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const speechText = 'Here are the tasks you can do';
+        const child = sessionAttributes.child
+        const tasks = sessionAttributes.tasks[child]
         return handlerInput.responseBuilder
-            .speak(speechText)
+            .speak(tasks)
             .shouldEndSession(False)
             .getResponse();
     }
@@ -92,7 +110,7 @@ const SwitchChildIntentHandler = {
         const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt('patate')
+            .shouldEndSession(False)
             .getResponse();
     }
 };
