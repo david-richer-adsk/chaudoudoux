@@ -39,7 +39,7 @@ const LaunchRequestHandler = {
 
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(false)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -60,7 +60,7 @@ const AddPointIntentHandler = {
         const speechText = 'One chaudoudoux added for ' + child + '. Good Job ' + child + '!!!' ;
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(false)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -76,7 +76,7 @@ const TotalPointIntentHandler = {
         const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
         return handlerInput.responseBuilder
             .speak(speechText)
-            .shouldEndSession(false)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -93,7 +93,7 @@ const ListTasksIntentHandler = {
         const tasks = sessionAttributes.tasks[child]
         return handlerInput.responseBuilder
             .speak(tasks)
-            .shouldEndSession(false)
+            .reprompt('patate')
             .getResponse();
     }
 };
@@ -107,7 +107,7 @@ const SwitchChildIntentHandler = {
         const child = handlerInput.requestEnvelope.request.intent.slots.child.value
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.child = child
-        const speechText = child + ' has ' + sessionAttributes.points[child] + ' chaudoudoux';
+        const speechText = 'Hi ' + child + '! You have ' + sessionAttributes.points[child] + ' chaudoudoux!';
         return handlerInput.responseBuilder
             .speak(speechText)
             .shouldEndSession(false)
